@@ -33,23 +33,17 @@ public class MyTry {
 			// Get the latest ticker data showing BTC to EUR
 			ticker = krakenMarketDataService.getKrakenTicker(CurrencyPair.ETH_EUR);
 			BigDecimal close = ticker.getClose().getPrice();
-			if (greaterThan(close, plus3percent)) {
+			if (greaterThan(close, plus3percent) || lesserThan(close, minus3percent)) {
 				base = close;
 				plus3percent = increase(base, percent);
 				minus3percent = decrease(base, percent);
-				// +3% increase
-				BigDecimal increase = getVariation(before, close);
-				System.out.println("+" + increase + "% !!");
+				BigDecimal variation = getVariation(before, close);
+				System.out.println(variation + "% !!");
 				System.out.println("before = " + before + " - current = " + close);
-				before = close;
-			} else if (lesserThan(close, minus3percent)) {
-				base = close;
-				plus3percent = increase(base, percent);
-				minus3percent = decrease(base, percent);
-				// -3% decrease
-				BigDecimal decrease = getVariation(before, close);
-				System.out.println(decrease + "% !!");
-				System.out.println("before = " + before + " - current = " + close);
+				
+				// send mail
+				
+				
 				before = close;
 			}
 			Thread.sleep(5000);
