@@ -119,5 +119,13 @@ public class Trend {
 	public State getState() {
 		return state;
 	}
+	
+	public int getDecreasingCount() {
+		return decreasingCount;
+	}
+	
+	public int getIncreasingCount() {
+		return increasingCount;
+	}
 
 }

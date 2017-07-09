@@ -191,52 +191,123 @@ public class TrendTest {
 	public void testLifecycle() {
 		Trend trend = new Trend();
 		trend.update(BigDecimal.valueOf(-0.02));
+		assertTrue(1 == trend.getDecreasingCount());
+		assertTrue(0 == trend.getIncreasingCount());
 		assertTrue(trend.getState() == State.START);
+		
 		trend.update(BigDecimal.valueOf(0.02));
+		assertTrue(0 == trend.getDecreasingCount());
+		assertTrue(1 == trend.getIncreasingCount());
 		assertTrue(trend.getState() == State.START);
+		
 		trend.update(BigDecimal.valueOf(-0.02));
+		assertTrue(1 == trend.getDecreasingCount());
+		assertTrue(0 == trend.getIncreasingCount());
 		assertTrue(trend.getState() == State.START);
+		
 		trend.update(BigDecimal.valueOf(-0.02));
+		assertTrue(2 == trend.getDecreasingCount());
+		assertTrue(0 == trend.getIncreasingCount());
 		assertTrue(trend.getState() == State.CONTINUE_DECREASE);
+		
 		trend.update(BigDecimal.valueOf(0.02));
+		assertTrue(2 == trend.getDecreasingCount());
+		assertTrue(1 == trend.getIncreasingCount());
 		assertTrue(trend.getState() == State.SWITCH_UP);
+		
 		trend.update(BigDecimal.valueOf(-0.02));
+		assertTrue(3 == trend.getDecreasingCount());
+		assertTrue(0 == trend.getIncreasingCount());
 		assertTrue(trend.getState() == State.CONTINUE_DECREASE);
+		
 		trend.update(BigDecimal.valueOf(-0.02));
+		assertTrue(4 == trend.getDecreasingCount());
+		assertTrue(0 == trend.getIncreasingCount());
 		assertTrue(trend.getState() == State.CONTINUE_DECREASE);
+		
 		trend.update(BigDecimal.valueOf(0.02));
+		assertTrue(4 == trend.getDecreasingCount());
+		assertTrue(1 == trend.getIncreasingCount());
 		assertTrue(trend.getState() == State.SWITCH_UP);
+		
 		trend.update(BigDecimal.valueOf(0.02));
+		assertTrue(4 == trend.getDecreasingCount());
+		assertTrue(2 == trend.getIncreasingCount());
 		assertTrue(trend.getState() == State.BUY_TIME);
+		
 		trend.update(BigDecimal.valueOf(-0.02));
+		assertTrue(1 == trend.getDecreasingCount());
+		assertTrue(0 == trend.getIncreasingCount());
 		assertTrue(trend.getState() == State.START);
+		
 		trend.update(BigDecimal.valueOf(-0.02));
+		assertTrue(2 == trend.getDecreasingCount());
+		assertTrue(0 == trend.getIncreasingCount());
 		assertTrue(trend.getState() == State.CONTINUE_DECREASE);
+		
 		trend.update(BigDecimal.valueOf(-0.02));
+		assertTrue(3 == trend.getDecreasingCount());
+		assertTrue(0 == trend.getIncreasingCount());
 		assertTrue(trend.getState() == State.CONTINUE_DECREASE);
+		
 		trend.update(BigDecimal.valueOf(0.02));
+		assertTrue(3 == trend.getDecreasingCount());
+		assertTrue(1 == trend.getIncreasingCount());
 		assertTrue(trend.getState() == State.SWITCH_UP);
+		
 		trend.update(BigDecimal.valueOf(-0.02));
+		assertTrue(4 == trend.getDecreasingCount());
+		assertTrue(0 == trend.getIncreasingCount());
 		assertTrue(trend.getState() == State.CONTINUE_DECREASE);
+		
 		trend.update(BigDecimal.valueOf(-0.02));
+		assertTrue(5 == trend.getDecreasingCount());
+		assertTrue(0 == trend.getIncreasingCount());
 		assertTrue(trend.getState() == State.CONTINUE_DECREASE);
+		
 		trend.update(BigDecimal.valueOf(0.02));
+		assertTrue(5 == trend.getDecreasingCount());
+		assertTrue(1 == trend.getIncreasingCount());
 		assertTrue(trend.getState() == State.SWITCH_UP);
+		
 		trend.update(BigDecimal.valueOf(0.02));
+		assertTrue(5 == trend.getDecreasingCount());
+		assertTrue(2 == trend.getIncreasingCount());
 		assertTrue(trend.getState() == State.BUY_TIME);
+		
 		trend.update(BigDecimal.valueOf(0.02));
+		assertTrue(0 == trend.getDecreasingCount());
+		assertTrue(1 == trend.getIncreasingCount());
 		assertTrue(trend.getState() == State.START);
+		
 		trend.update(BigDecimal.valueOf(0.02));
+		assertTrue(0 == trend.getDecreasingCount());
+		assertTrue(2 == trend.getIncreasingCount());
 		assertTrue(trend.getState() == State.CONTINUE_INCREASE);
+		
 		trend.update(BigDecimal.valueOf(-0.02));
+		assertTrue(1 == trend.getDecreasingCount());
+		assertTrue(2 == trend.getIncreasingCount());
 		assertTrue(trend.getState() == State.SWITCH_DOWN);
+		
 		trend.update(BigDecimal.valueOf(0.02));
+		assertTrue(0 == trend.getDecreasingCount());
+		assertTrue(3 == trend.getIncreasingCount());
 		assertTrue(trend.getState() == State.CONTINUE_INCREASE);
+		
 		trend.update(BigDecimal.valueOf(-0.02));
+		assertTrue(1 == trend.getDecreasingCount());
+		assertTrue(3 == trend.getIncreasingCount());
 		assertTrue(trend.getState() == State.SWITCH_DOWN);
+		
 		trend.update(BigDecimal.valueOf(-0.02));
+		assertTrue(2 == trend.getDecreasingCount());
+		assertTrue(3 == trend.getIncreasingCount());
 		assertTrue(trend.getState() == State.SELL_TIME);
+		
 		trend.update(BigDecimal.valueOf(0.02));
+		assertTrue(0 == trend.getDecreasingCount());
+		assertTrue(1 == trend.getIncreasingCount());
 		assertTrue(trend.getState() == State.START);
 	}
 }
