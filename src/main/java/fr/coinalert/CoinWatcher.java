@@ -3,10 +3,15 @@ package fr.coinalert;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.mail.Message;
 
 import org.knowm.xchange.currency.CurrencyPair;
 import org.knowm.xchange.kraken.dto.marketdata.KrakenTicker;
 import org.knowm.xchange.kraken.service.KrakenMarketDataServiceRaw;
+import org.simplejavamail.email.Recipient;
 
 final class CoinWatcher extends Thread {
 	private final CurrencyPair pair;
@@ -48,8 +53,8 @@ final class CoinWatcher extends Thread {
 			e.printStackTrace();
 			StringWriter errors = new StringWriter();
 			e.printStackTrace(new PrintWriter(errors));
-			MailSender.sendMail("CoinAlert exception", errors.toString(), Messages.getString("CoinAlert.admin.name"),
-					Messages.getString("CoinAlert.admin.email"));
+			MailSender.sendMail("CoinAlert exception", errors.toString(), new Recipient(Messages.getString("CoinAlert.admin.name"),
+					Messages.getString("CoinAlert.admin.email"), Message.RecipientType.TO));
 			System.exit(-1);
 		}
 	}
@@ -58,13 +63,19 @@ final class CoinWatcher extends Thread {
 		String subject = "Update on " + pair;
 		String text = pair + " - before = " + before + " - current = " + close;
 		String emailText = variation + "%\n" + text;
-		String rep1 = Messages.getString("CoinAlert.recipient.name");
-		String rep1Adress = Messages.getString("CoinAlert.recipient.email");
-
 		System.out.println(variation);
 		System.out.println(text);
 
-		MailSender.sendMail(subject, emailText, rep1, rep1Adress);
+		MailSender.sendMail(subject, emailText, collectRecipients());
 
+	}
+
+	private static Recipient[] collectRecipients() {
+		String[] addresses = Messages.getString("CoinAlert.recipient.email").split(",");
+		List<Recipient> recipients = new ArrayList<Recipient>();
+		for (String address : addresses) {
+			recipients.add(new Recipient(address, address, Message.RecipientType.TO));
+		}
+		return recipients.toArray(new Recipient[recipients.size()]);
 	}
 }
