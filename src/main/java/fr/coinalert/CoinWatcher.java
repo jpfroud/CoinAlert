@@ -35,6 +35,7 @@ final class CoinWatcher extends Thread {
 				// Get the latest ticker data
 				ticker = krakenMarketDataService.getKrakenTicker(pair);
 				BigDecimal close = ticker.getClose().getPrice();
+				System.out.println("Last " + pair +" : " + close);
 				if (BigDecimalUtil.greaterThan(close, plusPercent) || BigDecimalUtil.lesserThan(close, minusPercent)) {
 					BigDecimal variation = BigDecimalUtil.getVariation(before, close);
 					trend.update(variation);
