@@ -8,34 +8,34 @@ import java.math.BigDecimal;
 import javax.mail.Message;
 
 import org.knowm.xchange.currency.CurrencyPair;
-import org.knowm.xchange.kraken.dto.marketdata.KrakenTicker;
-import org.knowm.xchange.kraken.service.KrakenMarketDataServiceRaw;
+import org.knowm.xchange.dto.marketdata.Ticker;
+import org.knowm.xchange.service.marketdata.MarketDataService;
 import org.simplejavamail.email.Recipient;
 
 final class CoinWatcher extends Thread {
 	private final CurrencyPair pair;
-	private final KrakenMarketDataServiceRaw krakenMarketDataService;
+	private final MarketDataService marketDataService;
 
-	CoinWatcher(CurrencyPair pair, KrakenMarketDataServiceRaw krakenMarketDataService) {
+	CoinWatcher(CurrencyPair pair, MarketDataService marketDataService) {
 		this.pair = pair;
-		this.krakenMarketDataService = krakenMarketDataService;
+		this.marketDataService = marketDataService;
 	}
 
 	@Override
 	public void run() {
 		// Get the latest ticker data
 		boolean initOK = false;
-		KrakenTicker ticker = null;
+		Ticker ticker = null;
 		do {
 			try {
-				ticker = krakenMarketDataService.getKrakenTicker(pair);
+				ticker = marketDataService.getTicker(pair);
 				initOK = true;
 			} catch (IOException e) {
 				e.printStackTrace();
 				continue;
 			}
 		} while (!initOK);
-		BigDecimal base = ticker.getClose().getPrice();
+		BigDecimal base = ticker.getLast();
 		BigDecimal before = base;
 		BigDecimal percent = new BigDecimal(Messages.getString("CoinAlert.percent"));
 		BigDecimal plusPercent = BigDecimalUtil.increase(base, percent);
@@ -44,8 +44,8 @@ final class CoinWatcher extends Thread {
 		while (true) {
 			try {
 				// Get the latest ticker data
-				ticker = krakenMarketDataService.getKrakenTicker(pair);
-				BigDecimal close = ticker.getClose().getPrice();
+				ticker = marketDataService.getTicker(pair);
+				BigDecimal close = ticker.getLast();
 				System.out.println("Last " + pair + " : " + close);
 				if (BigDecimalUtil.greaterThan(close, plusPercent) || BigDecimalUtil.lesserThan(close, minusPercent)) {
 					BigDecimal variation = BigDecimalUtil.getVariation(before, close);
@@ -83,7 +83,7 @@ final class CoinWatcher extends Thread {
 	static void sendAlert(CurrencyPair pair, BigDecimal before, BigDecimal close, BigDecimal variation, Trend trend) {
 		String subject = "Update on " + pair;
 		String text = pair + " - before = " + before + " - current = " + close;
-		String emailText = variation + "%\n" + text + "%\n" + trend.getMessage();
+		String emailText = variation + "\n" + text + "%\n" + trend.getMessage();
 		System.out.println(variation);
 		System.out.println(text);
 		System.out.println(trend.getMessage());
