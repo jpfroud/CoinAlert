@@ -83,7 +83,7 @@ final class CoinWatcher extends Thread {
 	static void sendAlert(CurrencyPair pair, BigDecimal before, BigDecimal close, BigDecimal variation, Trend trend) {
 		String subject = "Update on " + pair;
 		String text = pair + " - before = " + before + " - current = " + close;
-		String emailText = variation + "\n" + text + "%\n" + trend.getMessage();
+		String emailText = variation + "\n" + text + "\n" + trend.getMessage();
 		System.out.println(variation);
 		System.out.println(text);
 		System.out.println(trend.getMessage());
